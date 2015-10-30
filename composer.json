@@ -1,0 +1,30 @@
+{
+    "name": "elixir/elixir-session",
+    "description": "Component session",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "elixir",
+        "session"
+    ],
+    "homepage": "https://github.com/cedtanghe/elixir-session",
+    "require": {
+        "php": ">=5.4",
+        "elixir/elixir-stdlib": "~1.0",
+        "elixir/elixir-dispatcher": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Elixir\\Session\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Elixir\\Test\\Session\\": "tests/"
+        }
+    },
+    "suggest": {
+    }
+}
