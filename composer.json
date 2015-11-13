@@ -7,6 +7,16 @@
         "session"
     ],
     "homepage": "https://github.com/cedtanghe/elixir-session",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cedtanghe/elixir-stdlib"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/cedtanghe/elixir-dispatcher"
+        }
+    ],
     "require": {
         "php": ">=5.4",
         "elixir/elixir-stdlib": "~1.0",
