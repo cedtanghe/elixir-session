@@ -10,7 +10,7 @@ use Elixir\STDLib\ArrayUtils;
 /**
  * @author Cédric Tanghe <ced.tanghe@gmail.com>
  */
-class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable, \JsonSerializable
+class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable
 {
     use DispatcherTrait;
     
@@ -253,7 +253,7 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable, 
      */
     public function current() 
     {
-        return $this->get(key($_SESSION));
+        return $this->get($this->key());
     }
 
     /**
@@ -277,7 +277,7 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable, 
      */
     public function valid() 
     {
-        return null !== key($_SESSION);
+        return null !== $this->key();
     }
 
     /**
@@ -375,14 +375,6 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable, 
         $this->dispatch(new SessionEvent(SessionEvent::DESTROY));
         
         return $result;
-    }
-    
-    /**
-     * @ignore
-     */
-    public function jsonSerialize() 
-    {
-        return $this->__debugInfo();
     }
     
     /**
