@@ -20,9 +20,35 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable
     const FLASH_KEY = '___SESSION_FLASH___';
     
     /**
+     * @var self
+     */
+    protected static $instance;
+    
+    /**
      * @var \SessionHandlerInterface
      */
     protected $handler;
+    
+    /**
+     * @throws \LogicException
+     */
+    public function __construct() 
+    {
+        if(null !== static::$instance)
+        {
+            throw new \LogicException('A session can have only one instance.');
+        }
+        
+        static::$instance = $this;
+    }
+    
+    /**
+     * @return self
+     */
+    public static function instance()
+    {
+        return static::$instance;
+    }
     
     /**
      * {@inheritdoc}
