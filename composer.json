@@ -17,6 +17,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/cedtanghe/elixir-dispatcher"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/cedtanghe/elixir-db"
         }
     ],
     "require": {
@@ -38,5 +42,6 @@
         }
     },
     "suggest": {
+        "elixir/elixir-db": "*"
     }
 }
