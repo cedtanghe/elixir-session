@@ -23,6 +23,11 @@ interface SessionInterface extends DispatcherInterface
      * @return boolean
      */
     public function exist();
+    
+    /**
+     * @return int
+     */
+    public function getStatus();
 
     /**
      * @param string $value

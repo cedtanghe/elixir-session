@@ -91,6 +91,14 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable
 
         return false;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatus()
+    {
+        return session_status();
+    }
 
     /**
      * {@inheritdoc}
