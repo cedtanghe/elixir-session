@@ -7,7 +7,7 @@ use Elixir\Dispatcher\DispatcherInterface;
 /**
  * @author Cédric Tanghe <ced.tanghe@gmail.com>
  */
-interface SessionInterface extends DispatcherInterface
+interface SessionInterface extends \ArrayAccess, DispatcherInterface
 {
     /**
      * @param \SessionHandlerInterface $value

@@ -10,7 +10,7 @@ use Elixir\STDLib\ArrayUtils;
 /**
  * @author Cédric Tanghe <ced.tanghe@gmail.com>
  */
-class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable
+class Session implements SessionInterface, \Iterator, \Countable
 {
     use DispatcherTrait;
     
@@ -231,7 +231,7 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable
     {
         $_SESSION = $data;
         
-        if (count($this->all()) === 0)
+        if ($this->count() === 0)
         {
             $this->dispatch(new SessionEvent(SessionEvent::CLEAR));
         }
@@ -313,11 +313,11 @@ class Session implements SessionInterface, \ArrayAccess, \Iterator, \Countable
     {
         return null !== $this->key();
     }
-
+    
     /**
      * @ignore
      */
-    public function count()
+    public function count() 
     {
         return count($_SESSION);
     }

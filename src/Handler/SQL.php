@@ -12,7 +12,6 @@ use Elixir\DB\SQL\ConstraintFactory;
 /**
  * @author Cédric Tanghe <ced.tanghe@gmail.com>
  */
-
 class SQL implements \SessionHandlerInterface
 {
     /**
@@ -137,7 +136,7 @@ class SQL implements \SessionHandlerInterface
         $result = $this->DB->query($query);
         $row = $result->first();
         
-        if($row)
+        if ($row)
         {
             return $row['data'];
         }
@@ -155,7 +154,7 @@ class SQL implements \SessionHandlerInterface
         $query = $this->DB->createSelect('`sessions`')->column('COUNT(*)')->where('`id` = ?', $id);
         $result = $this->DB->query($query);
         
-        if((int)$result->column(0) > 0)
+        if ((int)$result->column(0) > 0)
         {
             $query = $this->DB->createUpdate('`sessions`')
                      ->set(['`data`' => $data, '`expires`' => $life])
