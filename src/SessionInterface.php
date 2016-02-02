@@ -10,6 +10,26 @@ use Elixir\Dispatcher\DispatcherInterface;
 interface SessionInterface extends \ArrayAccess, DispatcherInterface
 {
     /**
+     * @var string
+     */
+    const FLASH_INFO = 'flash_info';
+    
+    /**
+     * @var string
+     */
+    const FLASH_SUCCESS = 'flash_success';
+    
+    /**
+     * @var string
+     */
+    const FLASH_ERROR = 'flash_error';
+    
+    /**
+     * @var string
+     */
+    const FLASH_REDIRECT = 'flash_redirect';
+    
+    /**
      * @param \SessionHandlerInterface $value
      */
     public function setHandler(\SessionHandlerInterface $value);
