@@ -191,7 +191,7 @@ class SQL implements \SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function gc($mMaxLifetime)
+    public function gc($maxLifetime)
     {
         $query = $this->DB->createDelete('`sessions`')->where('`expires` < ?', time());
         $this->DB->exec($query);
