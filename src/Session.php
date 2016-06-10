@@ -5,7 +5,10 @@ namespace Elixir\Session;
 use Elixir\Dispatcher\DispatcherTrait;
 use Elixir\Session\SessionEvent;
 use Elixir\Session\SessionInterface;
-use Elixir\STDLib\ArrayUtils;
+use function Elixir\STDLib\array_get;
+use function Elixir\STDLib\array_has;
+use function Elixir\STDLib\array_remove;
+use function Elixir\STDLib\array_set;
 
 /**
  * @author Cédric Tanghe <ced.tanghe@gmail.com>
@@ -184,7 +187,7 @@ class Session implements SessionInterface, \Iterator, \Countable
      */
     public function has($key)
     {
-        return ArrayUtils::has($key, $_SESSION);
+        return array_has($key, $_SESSION);
     }
 
     /**
@@ -192,7 +195,7 @@ class Session implements SessionInterface, \Iterator, \Countable
      */
     public function get($key, $default = null)
     {
-        return ArrayUtils::get($key, $_SESSION, $default);
+        return array_get($key, $_SESSION, $default);
     }
 
     /**
@@ -200,7 +203,7 @@ class Session implements SessionInterface, \Iterator, \Countable
      */
     public function set($key, $value)
     {
-        ArrayUtils::set($key, $value, $_SESSION);
+        array_set($key, $value, $_SESSION);
     }
 
     /**
@@ -208,7 +211,7 @@ class Session implements SessionInterface, \Iterator, \Countable
      */
     public function remove($key) 
     {
-        ArrayUtils::remove($key, $_SESSION);
+        array_remove($key, $_SESSION);
 
         if (count($this->all()) === 0)
         {
@@ -327,7 +330,7 @@ class Session implements SessionInterface, \Iterator, \Countable
      */
     public function flash($key = null, $value = null)
     {
-        $bag = ArrayUtils::get(self::FLASH_KEY, $_SESSION, []);
+        $bag = array_get(self::FLASH_KEY, $_SESSION, []);
 
         if (null === $key) 
         {
@@ -352,7 +355,7 @@ class Session implements SessionInterface, \Iterator, \Countable
             }
         }
 
-        ArrayUtils::set(self::FLASH_KEY, $bag, $_SESSION);
+        array_set(self::FLASH_KEY, $bag, $_SESSION);
 
         if (isset($result)) 
         {
