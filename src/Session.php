@@ -3,8 +3,6 @@
 namespace Elixir\Session;
 
 use Elixir\Dispatcher\DispatcherTrait;
-use Elixir\Session\SessionEvent;
-use Elixir\Session\SessionInterface;
 use function Elixir\STDLib\array_get;
 use function Elixir\STDLib\array_has;
 use function Elixir\STDLib\array_remove;
@@ -16,35 +14,34 @@ use function Elixir\STDLib\array_set;
 class Session implements SessionInterface, \Iterator, \Countable
 {
     use DispatcherTrait;
-    
+
     /**
      * @var string
      */
     const FLASH_KEY = '___SESSION_FLASH___';
-    
+
     /**
      * @var self
      */
     protected static $instance;
-    
+
     /**
      * @var \SessionHandlerInterface
      */
     protected $handler;
-    
+
     /**
      * @throws \LogicException
      */
-    public function __construct() 
+    public function __construct()
     {
-        if(null !== static::$instance)
-        {
+        if (null !== static::$instance) {
             throw new \LogicException('A session can have only one instance.');
         }
-        
+
         static::$instance = $this;
     }
-    
+
     /**
      * @return self
      */
@@ -52,15 +49,15 @@ class Session implements SessionInterface, \Iterator, \Countable
     {
         return static::$instance;
     }
-    
+
     /**
      * {@inheritdoc}
+     *
      * @throws \LogicException
      */
     public function setHandler(\SessionHandlerInterface $value)
     {
-        if ($this->exist())
-        {
+        if ($this->exist()) {
             throw new \LogicException('Cannot set session handler after a session has already started.');
         }
 
@@ -82,19 +79,17 @@ class Session implements SessionInterface, \Iterator, \Countable
     {
         $sid = defined('SID') ? constant('SID') : false;
 
-        if (false !== $sid && $this->getId())
-        {
+        if (false !== $sid && $this->getId()) {
             return true;
         }
 
-        if (headers_sent())
-        {
+        if (headers_sent()) {
             return true;
         }
 
         return false;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -105,12 +100,12 @@ class Session implements SessionInterface, \Iterator, \Countable
 
     /**
      * {@inheritdoc}
+     *
      * @throws \LogicException
      */
     public function setId($value)
     {
-        if ($this->exist()) 
-        {
+        if ($this->exist()) {
             throw new \LogicException('Cannot set session id after a session has already started.');
         }
 
@@ -120,25 +115,24 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * {@inheritdoc}
      */
-    public function getId() 
+    public function getId()
     {
         return session_id();
     }
 
     /**
      * {@inheritdoc}
+     *
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
     public function setName($value)
     {
-        if ($this->exist())
-        {
+        if ($this->exist()) {
             throw new \LogicException('Cannot set name handler after a session has already started.');
         }
 
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $value))
-        {
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $value)) {
             throw new \InvalidArgumentException('Session name contains invalid characters.');
         }
 
@@ -148,7 +142,7 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * {@inheritdoc}
      */
-    public function getName() 
+    public function getName()
     {
         return session_name();
     }
@@ -156,7 +150,7 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * {@inheritdoc}
      */
-    public function regenerate($deleteOldSession = true) 
+    public function regenerate($deleteOldSession = true)
     {
         return session_regenerate_id($deleteOldSession);
     }
@@ -164,21 +158,19 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * {@inheritdoc}
      */
-    public function start() 
+    public function start()
     {
-        if (!$this->exist()) 
-        {
-            if (null !== $this->handler) 
-            {
+        if (!$this->exist()) {
+            if (null !== $this->handler) {
                 session_set_save_handler($this->handler, true);
             }
 
             $result = session_start();
             $this->dispatch(new SessionEvent(SessionEvent::START));
-            
+
             return $result;
         }
-        
+
         return true;
     }
 
@@ -209,12 +201,11 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * {@inheritdoc}
      */
-    public function remove($key) 
+    public function remove($key)
     {
         array_remove($key, $_SESSION);
 
-        if (count($this->all()) === 0)
-        {
+        if (count($this->all()) === 0) {
             $this->dispatch(new SessionEvent(SessionEvent::CLEAR));
         }
     }
@@ -233,9 +224,8 @@ class Session implements SessionInterface, \Iterator, \Countable
     public function replace(array $data)
     {
         $_SESSION = $data;
-        
-        if ($this->count() === 0)
-        {
+
+        if ($this->count() === 0) {
             $this->dispatch(new SessionEvent(SessionEvent::CLEAR));
         }
     }
@@ -251,10 +241,9 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * @ignore
      */
-    public function offsetSet($key, $value) 
+    public function offsetSet($key, $value)
     {
-        if (null === $key)
-        {
+        if (null === $key) {
             throw new \InvalidArgumentException('The key can not be undefined.');
         }
 
@@ -264,7 +253,7 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * @ignore
      */
-    public function offsetGet($key) 
+    public function offsetGet($key)
     {
         return $this->get($key);
     }
@@ -280,7 +269,7 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * @ignore
      */
-    public function rewind() 
+    public function rewind()
     {
         return reset($_SESSION);
     }
@@ -288,7 +277,7 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * @ignore
      */
-    public function current() 
+    public function current()
     {
         return $this->get($this->key());
     }
@@ -296,7 +285,7 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * @ignore
      */
-    public function key() 
+    public function key()
     {
         return key($_SESSION);
     }
@@ -312,19 +301,19 @@ class Session implements SessionInterface, \Iterator, \Countable
     /**
      * @ignore
      */
-    public function valid() 
+    public function valid()
     {
         return null !== $this->key();
     }
-    
+
     /**
      * @ignore
      */
-    public function count() 
+    public function count()
     {
         return count($_SESSION);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -332,33 +321,25 @@ class Session implements SessionInterface, \Iterator, \Countable
     {
         $bag = array_get(self::FLASH_KEY, $_SESSION, []);
 
-        if (null === $key) 
-        {
+        if (null === $key) {
             $result = $bag;
             $bag = [];
-        } 
-        else 
-        {
-            if (null === $value) 
-            {
+        } else {
+            if (null === $value) {
                 $result = null;
 
-                if (isset($bag[$key])) 
-                {
+                if (isset($bag[$key])) {
                     $result = $bag[$key];
                     unset($bag[$key]);
                 }
-            } 
-            else
-            {
+            } else {
                 $bag[$key] = $value;
             }
         }
 
         array_set(self::FLASH_KEY, $bag, $_SESSION);
 
-        if (isset($result)) 
-        {
+        if (isset($result)) {
             return $result;
         }
     }
@@ -368,52 +349,47 @@ class Session implements SessionInterface, \Iterator, \Countable
      */
     public function clear()
     {
-        if (!$this->exist())
-        {
+        if (!$this->exist()) {
             return false;
         }
-        
+
         $_SESSION = [];
         $this->dispatch(new SessionEvent(SessionEvent::CLEAR));
-        
+
         return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function destroy() 
+    public function destroy()
     {
-        if (!$this->exist())
-        {
+        if (!$this->exist()) {
             return false;
-        }
-        else
-        {
+        } else {
             $this->clear();
         }
 
-        if (ini_get('session.use_cookies'))
-        {
+        if (ini_get('session.use_cookies')) {
             $params = session_get_cookie_params();
 
             setcookie(
-                $this->getName(), 
-                '', 
-                time() - 42000, 
-                $params['path'], 
-                $params['domain'], 
-                $params['secure'], 
+                $this->getName(),
+                '',
+                time() - 42000,
+                $params['path'],
+                $params['domain'],
+                $params['secure'],
                 $params['httponly']
             );
         }
 
         $result = session_destroy();
         $this->dispatch(new SessionEvent(SessionEvent::DESTROY));
-        
+
         return $result;
     }
-    
+
     /**
      * @ignore
      */

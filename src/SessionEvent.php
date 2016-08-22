@@ -7,7 +7,7 @@ use Elixir\Dispatcher\Event;
 /**
  * @author Cédric Tanghe <ced.tanghe@gmail.com>
  */
-class SessionEvent extends Event 
+class SessionEvent extends Event
 {
     /**
      * @var string

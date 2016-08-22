@@ -13,22 +13,22 @@ interface SessionInterface extends \ArrayAccess, DispatcherInterface
      * @var string
      */
     const FLASH_INFO = 'flash_info';
-    
+
     /**
      * @var string
      */
     const FLASH_SUCCESS = 'flash_success';
-    
+
     /**
      * @var string
      */
     const FLASH_ERROR = 'flash_error';
-    
+
     /**
      * @var string
      */
     const FLASH_REDIRECT = 'flash_redirect';
-    
+
     /**
      * @param \SessionHandlerInterface $value
      */
@@ -40,10 +40,10 @@ interface SessionInterface extends \ArrayAccess, DispatcherInterface
     public function geHandler();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function exist();
-    
+
     /**
      * @return int
      */
@@ -70,32 +70,35 @@ interface SessionInterface extends \ArrayAccess, DispatcherInterface
     public function getName();
 
     /**
-     * @param boolean $deleteOldSession
-     * @return boolean
+     * @param bool $deleteOldSession
+     *
+     * @return bool
      */
     public function regenerate($deleteOldSession = true);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function start();
 
     /**
      * @param string|array $key
-     * @return boolean
+     *
+     * @return bool
      */
     public function has($key);
 
     /**
      * @param string|array $key
-     * @param mixed $default
+     * @param mixed        $default
+     *
      * @return mixed
      */
     public function get($key, $default = null);
 
     /**
      * @param string|array $key
-     * @param mixed $value
+     * @param mixed        $value
      */
     public function set($key, $value);
 
@@ -116,18 +119,19 @@ interface SessionInterface extends \ArrayAccess, DispatcherInterface
 
     /**
      * @param string|array $key
-     * @param mixed $value
+     * @param mixed        $value
+     *
      * @return mixed|void
      */
     public function flash($key = null, $value = null);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function clear();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function destroy();
 }
